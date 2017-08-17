@@ -22,12 +22,7 @@ DEPLOYMENTFOLDERS += engine_qml_folder engine_shaders_folder
 
 CONFIG += staticlib
 
-defined ( LIQUIDFUN ) {
-    LIQUIDFUN_DIR = $$(LIQUIDFUN)
-} else {
-    # Note: This needs to simply be changed to "liquidfun" for release.
-    LIQUIDFUN_DIR = $$PWD/../../third_party/liquidfun/liquidfun
-}
+LIQUIDFUN_DIR = $$PWD/../../third_party/liquidfun/liquidfun
 
 # TODO: limit this scope of this to just the headers/sources in this file.
 INCLUDEPATH += $$PWD $$PWD/../..
@@ -150,6 +145,19 @@ SOURCES +=  \
     $$PWD/utils/QmlUtil.cpp \
     $$PWD/utils/Util.cpp \
 
+
+# Liquidfun srcs
+SOURCES +=  \
+    $$LIQUIDFUN_DIR/Box2D/Box2D/Collision/*.cpp \
+    $$LIQUIDFUN_DIR/Box2D/Box2D/Collision/Shapes/*.cpp \
+    $$LIQUIDFUN_DIR/Box2D/Box2D/Common/*.cpp \
+    $$LIQUIDFUN_DIR/Box2D/Box2D/Dynamics/*.cpp \
+    $$LIQUIDFUN_DIR/Box2D/Box2D/Dynamics/Contacts/*.cpp \
+    $$LIQUIDFUN_DIR/Box2D/Box2D/Dynamics/Joints/*.cpp \
+    $$LIQUIDFUN_DIR/Box2D/Box2D/Particle/*.cpp \
+    $$LIQUIDFUN_DIR/Box2D/Box2D/Rope/*.cpp \
+
+
 android {
     HEADERS += \
         $$PWD/android/AndroidActivity.h \
@@ -173,20 +181,7 @@ android {
         $$PWD/android/deploy/src/com/google/fpl/utils/GooglePlayServicesHelper.java \
         $$PWD/android/deploy/src/com/google/fpl/utils/SoundManager.java \
 
-    LIBS += \
-        $$LIQUIDFUN_DIR/Box2D/obj/local/armeabi-v7a/libliquidfun_static.a \
-
     QMAKE_CXXFLAGS_WARN_ON += -Wno-pragmas
-}
-macx {
-    LIBS += \
-        $$LIQUIDFUN_DIR/Box2D/Box2D/Debug/libliquidfun.a \
-}
-
-# For linux-specific statements, there is a slightly more complex predicate.
-unix:!mac:!android {
-    LIBS += \
-        $$LIQUIDFUN_DIR/Box2D/Box2D/Release/libliquidfun.a \
 }
 
 # Have Qt pick up our custom android source
